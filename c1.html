@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finanzas Corporativas · Clase 1 · Introducción a los Estados Financieros</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0D1117;--card:#161B27;--card2:#1C2333;
+  --yellow:#FFE600;--green:#21D07A;--red:#F85149;--blue:#58A6FF;--orange:#FF8C42;
+  --text:#E6EDF3;--muted:#8B949E;--border:#30363D;--radius:12px
+}
+html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text)}
+
+/* NAV */
+#navbar{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(13,17,23,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;backdrop-filter:blur(10px)}
+#nav-left{display:flex;align-items:center;gap:12px}
+#nav-badge{background:var(--orange);color:#000;font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:.5px}
+#nav-section{font-size:12px;color:var(--muted)}
+#nav-right{display:flex;align-items:center;gap:16px}
+#timer-display{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid var(--border);transition:.2s}
+#timer-display:hover{border-color:var(--orange);color:var(--orange)}
+#nav-counter{font-size:13px;color:var(--text);font-variant-numeric:tabular-nums}
+#progress{position:fixed;top:52px;left:0;height:3px;background:var(--orange);transition:width .4s ease;z-index:100}
+
+/* SLIDES */
+#slides{position:fixed;top:55px;bottom:64px;left:0;right:0;overflow:hidden}
+.slide{position:absolute;top:0;left:0;right:0;bottom:0;padding:36px 56px;display:flex;flex-direction:column;opacity:0;transform:translateX(60px);transition:opacity .35s ease,transform .35s ease;pointer-events:none;overflow-y:auto}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all}
+.slide.exit{opacity:0;transform:translateX(-60px)}
+
+/* CONTROLS */
+#controls{position:fixed;bottom:0;left:0;right:0;height:64px;background:rgba(13,17,23,.95);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:16px;z-index:100;backdrop-filter:blur(10px)}
+.btn-nav{background:var(--card2);color:var(--text);border:1px solid var(--border);padding:10px 28px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;transition:.2s}
+.btn-nav:hover{border-color:var(--orange);color:var(--orange)}
+.btn-nav:disabled{opacity:.3;cursor:not-allowed}
+#slide-dots{display:flex;gap:5px;align-items:center}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:.2s}
+.dot.active{background:var(--orange);width:18px;border-radius:3px}
+
+/* TYPOGRAPHY */
+.slide-title{font-size:34px;font-weight:700;line-height:1.2;margin-bottom:6px}
+.slide-title .acc{color:var(--orange)}
+.slide-subtitle{font-size:15px;color:var(--muted);margin-bottom:28px}
+.badge{display:inline-block;background:rgba(255,140,66,.12);color:var(--orange);border:1px solid rgba(255,140,66,.25);padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.badge-blue{background:rgba(88,166,255,.12);color:var(--blue);border-color:rgba(88,166,255,.25)}
+.badge-green{background:rgba(33,208,122,.12);color:var(--green);border-color:rgba(33,208,122,.25)}
+
+/* COVER */
+.cover{justify-content:center;align-items:center;text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(255,140,66,.07) 0%,transparent 65%)}
+.cover-logo{width:72px;height:72px;background:var(--orange);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#000;margin:0 auto 28px;box-shadow:0 0 50px rgba(255,140,66,.25)}
+.cover .slide-title{font-size:46px}
+.cover-chips{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+.cover-chip{background:var(--card);border:1px solid var(--border);padding:8px 18px;border-radius:8px;font-size:13px;color:var(--muted)}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+.card-accent{border-left:3px solid var(--orange)}
+.card-green{border-left:3px solid var(--green)}
+.card-blue{border-left:3px solid var(--blue)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+
+/* FORMULA BOX */
+.formula{background:var(--card2);border:1px solid var(--border);border-left:4px solid var(--orange);padding:14px 20px;border-radius:8px;font-family:'Courier New',monospace;font-size:17px;color:var(--orange);margin:14px 0}
+.formula .var{color:var(--text)}
+.formula .comment{color:var(--muted);font-size:13px;font-family:'Segoe UI',sans-serif}
+
+/* KPI */
+.kpi-val{font-size:38px;font-weight:800;color:var(--orange);line-height:1;font-variant-numeric:tabular-nums}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.5px}
+.kpi-sub{font-size:12px;color:var(--green);margin-top:3px}
+.kpi-sub.neg{color:var(--red)}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);color:var(--muted);font-weight:600;text-transform:uppercase;font-size:10px;letter-spacing:.5px;padding:9px 11px;text-align:right;border-bottom:2px solid var(--border)}
+thead th:first-child{text-align:left}
+tbody td{padding:9px 11px;text-align:right;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}
+tbody td:first-child{text-align:left;font-weight:500}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+.tr-highlight td{color:var(--orange);font-weight:700;background:rgba(255,140,66,.05)}
+.tr-green td{color:var(--green);font-weight:700}
+.pos{color:var(--green)}.neg{color:var(--red)}
+
+/* BUTTONS */
+.btn{background:var(--orange);color:#000;border:none;padding:9px 22px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;transition:.2s}
+.btn:hover{background:#e07a35;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);padding:9px 22px;border-radius:8px;cursor:pointer;font-size:13px;transition:.2s}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+/* REVEAL */
+.reveal-btn{background:rgba(255,140,66,.08);border:1px dashed rgba(255,140,66,.3);color:var(--orange);padding:9px 18px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:.2s;margin-top:10px}
+.reveal-btn:hover{background:rgba(255,140,66,.15)}
+.answer-block{display:none;margin-top:14px;padding:14px;background:rgba(33,208,122,.06);border:1px solid rgba(33,208,122,.2);border-radius:8px}
+.answer-block.show{display:block}
+
+/* DISCUSSION */
+.discussion{background:rgba(88,166,255,.07);border:1px solid rgba(88,166,255,.18);border-radius:8px;padding:14px 18px;margin-top:14px}
+.disc-label{font-size:10px;color:var(--blue);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.discussion p{font-size:13px;color:var(--text);line-height:1.6}
+
+/* CALC ROW */
+.calc-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.calc-label{flex:1;font-size:13px}
+.calc-value{font-size:13px;color:var(--orange);font-variant-numeric:tabular-nums;min-width:80px;text-align:right}
+
+/* STEP */
+.step{display:flex;gap:14px;margin-bottom:14px}
+.step-num{width:28px;height:28px;background:var(--orange);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:2px}
+.step-content{flex:1}
+.step-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.5}
+
+/* RECAP */
+.recap-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.recap-check{color:var(--green);font-size:16px;flex-shrink:0;margin-top:1px}
+.recap-text{font-size:14px;line-height:1.5}
+
+/* TIMELINE */
+.tl{display:flex;gap:0;margin:18px 0}
+.tl-item{flex:1;padding:10px 6px;text-align:center;border-top:3px solid var(--border);position:relative;font-size:11px}
+.tl-item.done{border-color:var(--green)}.tl-item.current{border-color:var(--orange)}
+.tl-time{color:var(--orange);font-weight:700;font-size:10px}
+.tl-label{color:var(--text);margin-top:3px;font-size:11px}
+.tl-min{color:var(--muted);font-size:10px}
+
+/* TAG */
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;text-transform:uppercase}
+.tag-y{background:rgba(255,230,0,.15);color:var(--yellow)}.tag-g{background:rgba(33,208,122,.15);color:var(--green)}.tag-r{background:rgba(248,81,73,.15);color:var(--red)}.tag-b{background:rgba(88,166,255,.15);color:var(--blue)}.tag-o{background:rgba(255,140,66,.15);color:var(--orange)}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* CLASSIFY EXERCISE */
+.clf-item{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:11px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.clf-name{font-size:13px;font-weight:500;flex:1}
+.clf-btns{display:flex;gap:6px}
+.clf-btn{padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;font-size:11px;font-weight:700;transition:.2s}
+.clf-btn:hover{border-color:var(--orange);color:var(--orange)}
+.clf-btn.sel{background:rgba(255,140,66,.2);border-color:var(--orange);color:var(--orange)}
+.clf-btn.ok{background:rgba(33,208,122,.2);border-color:var(--green);color:var(--green)}
+.clf-btn.bad{background:rgba(248,81,73,.2);border-color:var(--red);color:var(--red)}
+
+/* EQUATION VISUAL */
+.eq-box{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:20px;text-align:center;flex:1}
+.eq-box.highlight{border-color:var(--orange);background:rgba(255,140,66,.06)}
+.eq-val{font-size:28px;font-weight:800;color:var(--orange)}
+.eq-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.eq-sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+.eq-op{font-size:32px;color:var(--muted);display:flex;align-items:center;padding:0 8px}
+
+/* 4 EEFF CARDS */
+.eeff-card{background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:18px;cursor:pointer;transition:.2s}
+.eeff-card:hover{border-color:var(--orange)}
+.eeff-card.active{border-color:var(--orange);background:rgba(255,140,66,.06)}
+.eeff-icon{font-size:28px;margin-bottom:10px}
+.eeff-title{font-size:14px;font-weight:700;margin-bottom:6px}
+.eeff-meta{font-size:11px;color:var(--muted);margin-bottom:8px}
+.eeff-formula{font-family:'Courier New',monospace;font-size:11px;color:var(--orange);background:rgba(255,140,66,.08);padding:6px 8px;border-radius:4px;margin-top:8px}
+
+/* DEVENGADO EXERCISE */
+.dev-item{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px}
+.dev-scenario{font-size:13px;margin-bottom:10px;line-height:1.5}
+.dev-btns{display:flex;gap:8px}
+.dev-btn{flex:1;padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;font-size:12px;font-weight:600;text-align:center;transition:.2s}
+.dev-btn:hover{border-color:var(--orange);color:var(--orange)}
+.dev-btn.sel-dev{background:rgba(88,166,255,.2);border-color:var(--blue);color:var(--blue)}
+.dev-btn.sel-per{background:rgba(33,208,122,.2);border-color:var(--green);color:var(--green)}
+.dev-btn.ok{background:rgba(33,208,122,.2);border-color:var(--green);color:var(--green)}
+.dev-btn.bad{background:rgba(248,81,73,.2);border-color:var(--red);color:var(--red)}
+.dev-explain{display:none;font-size:12px;color:var(--muted);margin-top:8px;padding:8px;background:rgba(255,255,255,.03);border-radius:6px;line-height:1.5}
+.dev-explain.show{display:block}
+
+/* LINKAGE DIAGRAM */
+.link-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;margin:0 auto}
+.link-box{background:var(--card2);border:2px solid var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:.2s}
+.link-box:hover,.link-box.active{border-color:var(--orange);background:rgba(255,140,66,.06)}
+.link-box-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.link-box-sub{font-size:11px;color:var(--muted)}
+.link-arrow{text-align:center;font-size:22px;color:var(--orange);padding:4px}
+.link-detail{background:rgba(255,140,66,.06);border:1px solid rgba(255,140,66,.2);border-radius:8px;padding:14px;margin-top:14px;font-size:13px;line-height:1.6;display:none}
+.link-detail.show{display:block}
+
+/* BADGE ORANGE */
+.badge-orange{background:rgba(255,140,66,.12);color:var(--orange);border-color:rgba(255,140,66,.25)}
+
+/* SOURCE CARD */
+.source-card{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.source-icon{font-size:20px;flex-shrink:0}
+.source-name{font-size:13px;font-weight:600}
+.source-desc{font-size:11px;color:var(--muted);margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div id="navbar">
+  <div id="nav-left">
+    <span id="nav-badge" style="background:var(--orange);color:#000;font-size:10px;font-weight:800;padding:3px 8px;border-radius:4px;letter-spacing:.5px">CLASE 1</span>
+    <span id="nav-section">Portada</span>
+  </div>
+  <div id="nav-right">
+    <span id="timer-display" onclick="toggleTimer()" title="Click para iniciar/pausar">⏱ 00:00</span>
+    <span id="nav-counter">1 / 21</span>
+  </div>
+</div>
+<div id="progress" style="width:0%"></div>
+
+<!-- SLIDES -->
+<div id="slides">
+
+<!-- 0: PORTADA -->
+<div class="slide cover active" data-section="Portada">
+  <div class="cover-logo">M</div>
+  <div class="slide-title">INTRODUCCIÓN A LOS<br><span class="acc" style="color:var(--orange)">ESTADOS FINANCIEROS</span></div>
+  <div class="slide-subtitle" style="font-size:18px;margin-top:12px">Finanzas Corporativas · Universidad de San Andrés · Primavera 2025</div>
+  <div class="cover-chips">
+    <div class="cover-chip">⏱ 90 minutos</div>
+    <div class="cover-chip">📚 4 Estados Financieros</div>
+    <div class="cover-chip">🧮 3 ejercicios interactivos</div>
+  </div>
+</div>
+
+<!-- 1: AGENDA -->
+<div class="slide" data-section="Agenda">
+  <div class="badge">Hoja de ruta</div>
+  <div class="slide-title">¿Qué vemos <span class="acc">hoy?</span></div>
+  <div class="slide-subtitle">Clase 1 — 90 minutos</div>
+  <div class="tl">
+    <div class="tl-item done"><div class="tl-time">00'</div><div class="tl-label">Presentación</div><div class="tl-min">5 min</div></div>
+    <div class="tl-item current"><div class="tl-time">05'</div><div class="tl-label">Lenguaje de negocios</div><div class="tl-min">20 min</div></div>
+    <div class="tl-item"><div class="tl-time">25'</div><div class="tl-label">Los 4 EEFF</div><div class="tl-min">25 min</div></div>
+    <div class="tl-item"><div class="tl-time">50'</div><div class="tl-label">Análisis del Balance</div><div class="tl-min">15 min</div></div>
+    <div class="tl-item"><div class="tl-time">65'</div><div class="tl-label">IS, CF y linkage</div><div class="tl-min">15 min</div></div>
+    <div class="tl-item"><div class="tl-time">80'</div><div class="tl-label">Recursos y cierre</div><div class="tl-min">10 min</div></div>
+  </div>
+  <div class="g2" style="margin-top:12px">
+    <div class="card" style="border-left:3px solid var(--orange)">
+      <div class="kpi-label" style="margin-bottom:8px">Pregunta central</div>
+      <div style="font-size:16px;font-weight:700;margin-top:8px;line-height:1.4">"¿Cómo leemos la 'salud' de una empresa con solo 4 documentos?"</div>
+    </div>
+    <div class="card">
+      <div class="kpi-label" style="margin-bottom:10px">Caso de estudio: MELI</div>
+      <div class="recap-item"><span class="recap-check">✓</span><span class="recap-text">Balance Sheet 2024</span></div>
+      <div class="recap-item"><span class="recap-check">✓</span><span class="recap-text">Income Statement</span></div>
+      <div class="recap-item"><span class="recap-check">✓</span><span class="recap-text">Cash Flow</span></div>
+      <div class="recap-item" style="border:none"><span class="recap-check">✓</span><span class="recap-text">Fuentes de datos</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2: LENGUAJE DE NEGOCIOS -->
+<div class="slide" data-section="Lenguaje de negocios">
+  <div class="badge">Sección 1 · Fundamentos</div>
+  <div class="slide-title">Todas las empresas hablan el <span class="acc">mismo idioma</span></div>
+  <div class="slide-subtitle">Los estados financieros son el lenguaje universal de los negocios</div>
+  <div class="g3">
+    <div class="card card-accent">
+      <div style="font-size:24px;margin-bottom:8px">📖</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">Estandarizados</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">Las NIIF (IFRS) y US GAAP son los marcos contables globales. Permiten comparar MELI con Amazon con la misma vara.</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:24px;margin-bottom:8px">📅</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">Periódicos</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">Se presentan anualmente (10-K en SEC) y trimestralmente (10-Q). MELI publica sus EEFF dentro de los 60 días de cerrado el trimestre.</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:24px;margin-bottom:8px">✅</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">Auditados</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">Los EEFF anuales son auditados por firmas independientes (Big 4). La opinión del auditor es crítica para la confianza del mercado.</div>
+    </div>
+  </div>
+  <div class="discussion" style="margin-top:16px">
+    <div class="disc-label">💬 Pregunta para discutir</div>
+    <p>¿Por qué importa que todas las empresas usen el mismo lenguaje? ¿Qué pasaría si cada empresa inventara sus propias reglas?</p>
+  </div>
+</div>
+
+<!-- 3: ECUACIÓN PATRIMONIAL -->
+<div class="slide" data-section="Ecuación Patrimonial">
+  <div class="badge">Fundamento</div>
+  <div class="slide-title">La ecuación que lo <span class="acc">gobierna todo</span></div>
+  <div class="formula" style="font-size:20px;text-align:center;padding:18px">Activo (A) = Pasivo (P) + Patrimonio Neto (PN)</div>
+  <div style="display:flex;align-items:stretch;gap:8px;margin:16px 0">
+    <div class="eq-box highlight">
+      <div class="eq-label">ACTIVO</div>
+      <div class="eq-val">A</div>
+      <div class="eq-sub">Recursos económicos<br>¿En qué invertí?<br><span style="color:var(--orange);font-size:11px">Aplicaciones de fondos</span></div>
+    </div>
+    <div class="eq-op">=</div>
+    <div class="eq-box">
+      <div class="eq-label">PASIVO</div>
+      <div class="eq-val" style="color:var(--red)">P</div>
+      <div class="eq-sub">Obligaciones presentes<br>¿Cómo me financió terceros?<br><span style="color:var(--red);font-size:11px">Orígenes externos</span></div>
+    </div>
+    <div class="eq-op">+</div>
+    <div class="eq-box">
+      <div class="eq-label">PATRIMONIO NETO</div>
+      <div class="eq-val" style="color:var(--green)">PN</div>
+      <div class="eq-sub">Parte residual<br>¿Cuánto aportaron los dueños + resultados?<br><span style="color:var(--green);font-size:11px">PN = Aportes + Resultados acumulados</span></div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div style="font-size:11px;color:var(--orange);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">ACTIVO</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">Recurso económico presente, controlado por la entidad, resultado de sucesos pasados, con potencial de producir beneficios económicos futuros.</div>
+    </div>
+    <div class="card">
+      <div style="font-size:11px;color:var(--red);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">PASIVO</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">Obligación presente, resultado de sucesos pasados, que implicará una futura transferencia de un recurso económico.</div>
+    </div>
+    <div class="card">
+      <div style="font-size:11px;color:var(--green);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">PN</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">La parte residual de los activos una vez deducidos todos los pasivos. PN = Aportes de propietarios + Resultados acumulados.</div>
+    </div>
+  </div>
+  <div class="discussion">
+    <div class="disc-label">💬 Para discutir</div>
+    <p>Si MELI tiene Activos de $25,196M y Patrimonio Neto de $4,351M... ¿cuánto debe? ¿Qué te dice eso?</p>
+  </div>
+</div>
+
+<!-- 4: EJERCICIO 1 -->
+<div class="slide" data-section="Ejercicio 1 · A, P o PN">
+  <div class="badge">Ejercicio 1</div>
+  <div class="slide-title">¿Activo, Pasivo o <span class="acc">Patrimonio Neto?</span></div>
+  <div class="slide-subtitle">Clasificá cada ítem. Usá los botones A / P / PN.</div>
+  <div class="g2">
+    <div>
+      <div class="clf-item" id="clf1"><span class="clf-name">Cash &amp; Equivalents</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf1','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf1','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf1','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="clf2"><span class="clf-name">Accounts Receivable</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf2','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf2','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf2','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="clf3"><span class="clf-name">Long-Term Debt</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf3','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf3','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf3','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="clf4"><span class="clf-name">Retained Earnings</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf4','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf4','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf4','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="clf5"><span class="clf-name">Inventory</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf5','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf5','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf5','PN','PN',this)">PN</button></div></div>
+    </div>
+    <div>
+      <div class="clf-item" id="clf6"><span class="clf-name">Accounts Payable</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf6','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf6','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf6','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="clf7"><span class="clf-name">Net PP&amp;E (edificios, maquinaria)</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf7','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf7','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf7','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="clf8"><span class="clf-name">Common Stock</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf8','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf8','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf8','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="clf9"><span class="clf-name">Unearned Revenue</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf9','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf9','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf9','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="clf10"><span class="clf-name">Goodwill</span><div class="clf-btns"><button class="clf-btn" data-val="A" onclick="classify('clf10','A','A',this)">A</button><button class="clf-btn" data-val="P" onclick="classify('clf10','P','P',this)">P</button><button class="clf-btn" data-val="PN" onclick="classify('clf10','PN','PN',this)">PN</button></div></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="checkClassify('ex1',ex1Answers)">✓ Verificar respuestas</button>
+    <button class="btn-ghost" onclick="revealClassify(ex1Answers)">👁 Revelar todo</button>
+  </div>
+</div>
+
+<!-- 5: DEVENGADO vs PERCIBIDO -->
+<div class="slide" data-section="Devengado vs. Percibido">
+  <div class="badge">Concepto Clave</div>
+  <div class="slide-title">Ganar ≠ Cobrar · Gastar ≠ <span class="acc">Pagar</span></div>
+  <div class="slide-subtitle">La distinción más importante de la contabilidad financiera</div>
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid var(--blue)">
+      <div class="badge badge-blue" style="margin-bottom:12px">DEVENGADO (Accrual)</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px">Criterio económico: registramos cuando ocurre el <strong style="color:var(--text)">HECHO GENERADOR</strong>, independientemente del movimiento de caja.</div>
+      <div style="font-size:13px;line-height:1.6;background:rgba(88,166,255,.06);padding:10px;border-radius:6px;margin-bottom:12px">📌 Vendemos mercadería en enero → el ingreso es de <strong>ENERO</strong>, aunque cobren en marzo.</div>
+      <div style="font-size:12px;color:var(--blue);font-weight:600">→ Estado de Resultados</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <div class="badge badge-green" style="margin-bottom:12px">PERCIBIDO (Cash)</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px">Criterio financiero: registramos cuando efectivamente <strong style="color:var(--text)">ENTRA o SALE caja</strong> del negocio.</div>
+      <div style="font-size:13px;line-height:1.6;background:rgba(33,208,122,.06);padding:10px;border-radius:6px;margin-bottom:12px">📌 El cliente paga en marzo → el cash flow es de <strong>MARZO</strong>.</div>
+      <div style="font-size:12px;color:var(--green);font-weight:600">→ Estado de Flujos de Efectivo</div>
+    </div>
+  </div>
+  <div class="formula" style="text-align:center;font-size:15px">Resultado (Devengado) ≠ Flujo de Caja (Percibido)</div>
+  <div class="card" style="margin-top:6px">
+    <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--orange)">¿Por qué importa esta distinción?</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6">Una empresa puede ser muy rentable (buen resultado devengado) pero quedarse sin caja (mal flujo percibido) si no cobra a tiempo. Esto se llama <strong style="color:var(--text)">profit without cash</strong>.</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-top:8px">MELI en 2022: Net Income +$482M PERO Cash from Operations +$2,940M. ¿Por qué la diferencia? <span style="color:var(--orange)">(Hint: las provisions y el negocio fintech)</span></div>
+  </div>
+</div>
+
+<!-- 6: EJERCICIO 2 DEVENGADO -->
+<div class="slide" data-section="Ejercicio 2 · Devengado/Percibido">
+  <div class="badge">Ejercicio 2</div>
+  <div class="slide-title">¿Cuándo se <span class="acc">registra?</span></div>
+  <div class="slide-subtitle">Para cada transacción, indicá en qué momento se reconoce el resultado y cuándo se mueve la caja.</div>
+  <div class="dev-item" id="dev1">
+    <div class="dev-scenario">📦 <strong>MELI vende a un merchant en enero. El merchant paga a 30 días (febrero).</strong><br>¿Cuándo registra MELI el ingreso en el Estado de Resultados?</div>
+    <div class="dev-btns">
+      <button class="dev-btn" onclick="selectDev('dev1','dev',this)">📊 Resultado (Devengado) — ENERO</button>
+      <button class="dev-btn" onclick="selectDev('dev1','per',this)">💵 Caja (Percibido) — FEBRERO</button>
+    </div>
+    <div class="dev-explain" id="dev1-exp">El ingreso se devenga en enero (cuando se produjo la venta). La caja entra en febrero. Por eso Accounts Receivable sube en enero.</div>
+  </div>
+  <div class="dev-item" id="dev2">
+    <div class="dev-scenario">🏭 <strong>MELI paga el alquiler de sus depósitos de diciembre, en noviembre.</strong><br>¿Cuándo es el gasto?</div>
+    <div class="dev-btns">
+      <button class="dev-btn" onclick="selectDev('dev2','dev',this)">📊 Resultado (Devengado) — DICIEMBRE</button>
+      <button class="dev-btn" onclick="selectDev('dev2','per',this)">💵 Caja (Percibido) — NOVIEMBRE</button>
+    </div>
+    <div class="dev-explain" id="dev2-exp">El gasto corresponde a diciembre (cuando se usa el depósito). El pago fue en noviembre → aparece como Prepaid Expenses hasta diciembre.</div>
+  </div>
+  <div class="dev-item" id="dev3">
+    <div class="dev-scenario">💳 <strong>Un usuario de Mercado Pago paga una suscripción anual de $120 en enero.</strong><br>¿Cuándo entra la caja y cuándo se reconoce el ingreso?</div>
+    <div class="dev-btns">
+      <button class="dev-btn" onclick="selectDev('dev3','per',this)">💵 Caja entra: ENERO ($120 completo)</button>
+      <button class="dev-btn" onclick="selectDev('dev3','dev',this)">📊 Ingreso: $10/mes durante 12 meses</button>
+    </div>
+    <div class="dev-explain" id="dev3-exp">La caja entra toda en enero pero el ingreso se devenga $10/mes. El saldo pendiente aparece como Unearned Revenue (Pasivo) hasta que se presta el servicio.</div>
+  </div>
+  <div class="dev-item" id="dev4">
+    <div class="dev-scenario">🏦 <strong>MELI otorga un crédito de $1,000 a un usuario de Mercado Crédito.</strong><br>¿Es un gasto?</div>
+    <div class="dev-btns">
+      <button class="dev-btn" onclick="selectDev('dev4','per',this)">💵 No — es un activo (Loans Receivable)</button>
+      <button class="dev-btn" onclick="selectDev('dev4','dev',this)">📊 Gasto solo si hay mora → Provision for Bad Debts</button>
+    </div>
+    <div class="dev-explain" id="dev4-exp">Otorgar un crédito no es un gasto — es convertir caja en un activo (Loans Receivable). El gasto aparece solo si hay mora → Provision for Bad Debts.</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="revealAllDev()">👁 Ver respuestas</button>
+  </div>
+</div>
+
+<!-- 7: LOS 4 EEFF -->
+<div class="slide" data-section="Los 4 EEFF">
+  <div class="badge">Sección 2 · EEFF</div>
+  <div class="slide-title"><span class="acc">4 documentos</span>, toda la información</div>
+  <div class="slide-subtitle">Cada estado responde una pregunta diferente sobre el negocio</div>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="eeff-card" id="eeff1" onclick="toggleEEFF('eeff1')">
+      <div class="eeff-icon">📊</div>
+      <div class="eeff-title">Estado de Resultados<br><span style="font-weight:400;color:var(--muted);font-size:12px">(Income Statement)</span></div>
+      <div class="eeff-meta">¿Fue rentable el negocio?</div>
+      <div style="font-size:11px;color:var(--muted)">🎬 Película — evolución económica</div>
+      <div class="eeff-formula">Ventas − Costos − Gastos = Resultado Neto</div>
+    </div>
+    <div class="eeff-card" id="eeff2" onclick="toggleEEFF('eeff2')">
+      <div class="eeff-icon">📸</div>
+      <div class="eeff-title">Balance Sheet<br><span style="font-weight:400;color:var(--muted);font-size:12px">(Estado de Situación Patrimonial)</span></div>
+      <div class="eeff-meta">¿Cuánto vale y cuánto debe?</div>
+      <div style="font-size:11px;color:var(--muted)">📷 Foto — situación económico-financiera</div>
+      <div class="eeff-formula">Activo = Pasivo + PN</div>
+    </div>
+    <div class="eeff-card" id="eeff3" onclick="toggleEEFF('eeff3')">
+      <div class="eeff-icon">💵</div>
+      <div class="eeff-title">Cash Flow Statement<br><span style="font-weight:400;color:var(--muted);font-size:12px">(Flujo de Fondos)</span></div>
+      <div class="eeff-meta">¿Cuánta caja generó/consumió?</div>
+      <div style="font-size:11px;color:var(--muted)">🎬 Película — evolución financiera</div>
+      <div class="eeff-formula">Caja inicio + ΔOp + ΔInv + ΔFin = Caja cierre</div>
+    </div>
+    <div class="eeff-card" id="eeff4" onclick="toggleEEFF('eeff4')">
+      <div class="eeff-icon">📈</div>
+      <div class="eeff-title">Evolución del PN<br><span style="font-weight:400;color:var(--muted);font-size:12px">(Estado de Evolución del PN)</span></div>
+      <div class="eeff-meta">¿Cómo cambió el patrimonio?</div>
+      <div style="font-size:11px;color:var(--muted)">🎬 Película — evolución del PN</div>
+      <div class="eeff-formula">PN cierre = PN inicio + Resultado − Dividendos</div>
+    </div>
+  </div>
+  <div class="discussion">
+    <div class="disc-label">💬 Concepto clave</div>
+    <p>La foto (Balance Sheet) captura el resultado acumulado de todas las películas anteriores.</p>
+  </div>
+</div>
+
+<!-- 8: BALANCE ACTIVOS -->
+<div class="slide" data-section="Balance Sheet · Activos">
+  <div class="badge">Balance Sheet · Activos</div>
+  <div class="slide-title">El Activo: <span class="acc">¿en qué invertimos?</span></div>
+  <div class="slide-subtitle">Ordenados por liquidez — de más a menos líquido</div>
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid var(--blue)">
+      <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Activo Corriente</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Se espera convertir en cash en &lt; 12 meses</div>
+      <div class="calc-row"><span class="calc-label"><strong>Cash &amp; Equivalents</strong><br><span style="font-size:11px;color:var(--muted)">Caja, depósitos, cheques, plazos fijos &lt; 3 meses</span></span><span><span class="tag tag-g">Más líquido</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Short-Term Investments</strong><br><span style="font-size:11px;color:var(--muted)">Títulos, bonos con vencimiento &lt; 1 año</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Accounts Receivable</strong><br><span style="font-size:11px;color:var(--muted)">Ventas realizadas aún no cobradas</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Inventory</strong><br><span style="font-size:11px;color:var(--muted)">Materia prima, WIP, productos terminados</span></span></div>
+      <div class="calc-row" style="border:none"><span class="calc-label"><strong>Prepaid Expenses</strong><br><span style="font-size:11px;color:var(--muted)">Pagos adelantados aún no devengados</span></span></div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--orange)">
+      <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Activo No Corriente</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:12px">Se espera convertir en cash en &gt; 12 meses</div>
+      <div class="calc-row"><span class="calc-label"><strong>Long-Term Investments</strong><br><span style="font-size:11px;color:var(--muted)">Acciones, bonos a largo plazo</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Net PP&amp;E</strong><br><span style="font-size:11px;color:var(--muted)">Inmuebles, maquinaria, rodados (neto de depreciación)</span></span><span><span class="tag tag-o">AFN</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Goodwill</strong><br><span style="font-size:11px;color:var(--muted)">Solo en adquisiciones: precio pagado &gt; valor de activos identificables</span></span></div>
+      <div class="calc-row" style="border:none"><span class="calc-label"><strong>Other Intangibles</strong><br><span style="font-size:11px;color:var(--muted)">Patentes, marcas, licencias</span></span><span><span class="tag tag-b">AIN</span></span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px;background:rgba(255,140,66,.05);border-color:rgba(255,140,66,.2)">
+    <div style="display:flex;gap:32px;align-items:center;flex-wrap:wrap">
+      <div><div class="kpi-label">Total Assets MELI 2024</div><div class="kpi-val">$25,196M</div></div>
+      <div><div class="kpi-label">Current Assets</div><div style="font-size:22px;font-weight:700;color:var(--blue)">$20,142M <span style="font-size:13px;color:var(--muted)">(79.9%)</span></div></div>
+      <div><div class="kpi-label">Non-Current Assets</div><div style="font-size:22px;font-weight:700;color:var(--orange)">$5,054M <span style="font-size:13px;color:var(--muted)">(20.1%)</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 9: BALANCE PASIVOS Y PN -->
+<div class="slide" data-section="Balance Sheet · Pasivos y PN">
+  <div class="badge">Balance Sheet · Pasivos y PN</div>
+  <div class="slide-title">Pasivo y PN: <span class="acc">¿cómo nos financiamos?</span></div>
+  <div class="two-col">
+    <div class="card" style="border-left:3px solid var(--red)">
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">PASIVO · Deudas con terceros</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:600;margin:10px 0 6px">Corriente (&lt; 12 meses)</div>
+      <div class="calc-row"><span class="calc-label"><strong>Accounts Payable</strong><br><span style="font-size:11px;color:var(--muted)">Deudas con proveedores por compras</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Short-Term Borrowings</strong><br><span style="font-size:11px;color:var(--muted)">Préstamos bancarios corto plazo</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Accrued Expenses</strong><br><span style="font-size:11px;color:var(--muted)">Gastos incurridos, aún no pagados</span></span></div>
+      <div class="calc-row" style="border-bottom:2px solid var(--border)"><span class="calc-label"><strong>Unearned Revenue</strong><br><span style="font-size:11px;color:var(--muted)">Cobrado por adelantado, servicio no prestado</span></span></div>
+      <div style="font-size:11px;color:var(--muted);font-weight:600;margin:10px 0 6px">No Corriente (&gt; 12 meses)</div>
+      <div class="calc-row"><span class="calc-label"><strong>Long-Term Debt</strong><br><span style="font-size:11px;color:var(--muted)">Bonos, préstamos de largo plazo</span></span></div>
+      <div class="calc-row" style="border:none"><span class="calc-label"><strong>Deferred Tax Liability</strong><br><span style="font-size:11px;color:var(--muted)">Diferencias temporales de impuestos</span></span></div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--green)">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">PATRIMONIO NETO · El residual para los dueños</div>
+      <div class="calc-row" style="margin-top:10px"><span class="calc-label"><strong>Common Stock</strong><br><span style="font-size:11px;color:var(--muted)">Capital aportado por accionistas</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Additional Paid-In Capital</strong><br><span style="font-size:11px;color:var(--muted)">Prima de emisión</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Retained Earnings</strong><br><span style="font-size:11px;color:var(--muted)">Resultados acumulados no distribuidos</span></span></div>
+      <div class="calc-row"><span class="calc-label"><strong>Treasury Stock</strong><br><span style="font-size:11px;color:var(--muted)">Acciones recompradas (resta)</span></span></div>
+      <div style="margin-top:12px;padding:10px;background:rgba(33,208,122,.06);border-radius:8px">
+        <div style="font-size:11px;color:var(--muted)">MELI 2024 PN</div>
+        <div style="font-size:22px;font-weight:700;color:var(--green)">$4,351M <span style="font-size:12px;color:var(--muted)">(17.3% del Activo)</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px;border-left:3px solid var(--orange)">
+    <div style="font-size:13px;line-height:1.6;color:var(--muted)">💡 <strong style="color:var(--text)">La regla de oro:</strong> cuanto mayor el PN en proporción al Activo, más autosuficiente es la empresa. MELI financia 82.7% con terceros — típico de una fintech con gran cartera de créditos.</div>
+  </div>
+</div>
+
+<!-- 10: EJERCICIO 3 BALANCE MELI -->
+<div class="slide" data-section="Ejercicio 3 · Balance MELI">
+  <div class="badge">Ejercicio 3</div>
+  <div class="slide-title">Clasificá el Balance de <span class="acc">MELI</span></div>
+  <div class="slide-subtitle">Indicá si cada línea es AC, ANC, PC, PNC o PN.</div>
+  <div class="g2">
+    <div>
+      <div class="clf-item" id="bsclf1"><span class="clf-name">Cash &amp; Short-Term Investments $3,695M</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf1','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf1','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf1','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf1','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf1','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="bsclf2"><span class="clf-name">Accounts Receivable $10,475M</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf2','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf2','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf2','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf2','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf2','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="bsclf3"><span class="clf-name">Net PP&amp;E $1,829M</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf3','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf3','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf3','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf3','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf3','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="bsclf4"><span class="clf-name">Goodwill &amp; Intangibles $2,208M</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf4','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf4','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf4','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf4','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf4','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="bsclf5"><span class="clf-name">Accounts Payable $3,079M</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf5','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf5','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf5','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf5','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf5','PN','PN',this)">PN</button></div></div>
+    </div>
+    <div>
+      <div class="clf-item" id="bsclf6"><span class="clf-name">Short-Term Borrowings $2,058M</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf6','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf6','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf6','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf6','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf6','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="bsclf7"><span class="clf-name">Long-Term Debt $4,821M</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf7','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf7','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf7','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf7','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf7','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="bsclf8"><span class="clf-name">Deferred Tax Liability (Non-Current)</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf8','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf8','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf8','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf8','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf8','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="bsclf9"><span class="clf-name">Retained Earnings</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf9','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf9','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf9','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf9','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf9','PN','PN',this)">PN</button></div></div>
+      <div class="clf-item" id="bsclf10"><span class="clf-name">Common Stock + APIC</span><div class="clf-btns"><button class="clf-btn" data-val="AC" onclick="classify('bsclf10','AC','AC',this)">AC</button><button class="clf-btn" data-val="ANC" onclick="classify('bsclf10','ANC','ANC',this)">ANC</button><button class="clf-btn" data-val="PC" onclick="classify('bsclf10','PC','PC',this)">PC</button><button class="clf-btn" data-val="PNC" onclick="classify('bsclf10','PNC','PNC',this)">PNC</button><button class="clf-btn" data-val="PN" onclick="classify('bsclf10','PN','PN',this)">PN</button></div></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="checkClassify('ex3',ex3Answers)">✓ Verificar</button>
+    <button class="btn-ghost" onclick="revealClassify(ex3Answers)">👁 Revelar todo</button>
+  </div>
+</div>
+
+<!-- 11: INCOME STATEMENT -->
+<div class="slide" data-section="Income Statement">
+  <div class="badge">Income Statement</div>
+  <div class="slide-title">Estado de Resultados: la <span class="acc">película</span> de la rentabilidad</div>
+  <div class="slide-subtitle">Muestra si el negocio ganó o perdió durante un período</div>
+  <div class="two-col">
+    <div>
+      <table>
+        <thead><tr><th>Línea</th><th>$M</th><th>% Revenue</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue</td><td>20,777</td><td>100.0%</td></tr>
+          <tr><td>Cost of Goods Sold</td><td class="neg">(9,833)</td><td class="neg">(47.3%)</td></tr>
+          <tr class="tr-highlight"><td><strong>Gross Profit</strong></td><td><strong>10,944</strong></td><td><strong>52.7%</strong></td></tr>
+          <tr><td>SG&amp;A</td><td class="neg">(3,154)</td><td class="neg">(15.2%)</td></tr>
+          <tr><td>Provision for Bad Debts</td><td class="neg">(1,858)</td><td class="neg">(8.9%)</td></tr>
+          <tr><td>R&amp;D Expense</td><td class="neg">(1,934)</td><td class="neg">(9.3%)</td></tr>
+          <tr><td>D&amp;A</td><td class="neg">(630)</td><td class="neg">(3.0%)</td></tr>
+          <tr><td>Other Operating</td><td class="pos">263</td><td class="pos">1.3%</td></tr>
+          <tr class="tr-highlight"><td><strong>EBIT (Operating Income)</strong></td><td><strong>2,631</strong></td><td><strong>12.7%</strong></td></tr>
+          <tr><td>Interest Expense</td><td class="neg">(527)</td><td style="color:var(--muted)">—</td></tr>
+          <tr><td>Other Non-Operating</td><td class="pos">256</td><td style="color:var(--muted)">—</td></tr>
+          <tr class="tr-highlight"><td><strong>EBT</strong></td><td><strong>2,360</strong></td><td style="color:var(--muted)">—</td></tr>
+          <tr><td>Income Tax</td><td class="neg">(449)</td><td style="color:var(--muted)">—</td></tr>
+          <tr class="tr-green"><td><strong>Net Income</strong></td><td><strong>1,911</strong></td><td><strong>9.2%</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:12px">Cómo leerlo — 3 pasos</div>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Identificar el Net Income</div>
+          <div class="step-desc">Resultado final del período. MELI 2024: $1,911M (+94% vs 2023)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Subir hasta los subtotales</div>
+          <div class="step-desc">Gross Profit (rentabilidad del producto) → EBIT (rentabilidad operativa) → EBT (antes de impuestos)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Analizar qué líneas impactan más</div>
+          <div class="step-desc">¿Dónde se va el margen? En MELI: Provision for Bad Debts (8.9%) y R&amp;D (9.3%) son los mayores consumidores</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 12: CASH FLOW -->
+<div class="slide" data-section="Cash Flow Statement">
+  <div class="badge">Cash Flow Statement</div>
+  <div class="slide-title">Flujo de Fondos: el <span class="acc">cash real</span> del negocio</div>
+  <div class="slide-subtitle" style="font-style:italic">"Revenue is vanity, profit is sanity, but cash is reality" — anónimo</div>
+  <div class="g3" style="margin-bottom:16px">
+    <div class="card card-green">
+      <div style="font-size:24px;margin-bottom:8px">🔄</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px">Operación (Operating)</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">El corazón del negocio<br>Cobros de clientes − Pagos a proveedores y empleados</div>
+      <div style="font-size:28px;font-weight:800;color:var(--green)">+$7,918M</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">MELI 2024</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red)">
+      <div style="font-size:24px;margin-bottom:8px">🏗</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px">Inversión (Investing)</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Crecimiento futuro<br>Compra de PP&amp;E, adquisiciones, préstamos originados</div>
+      <div style="font-size:28px;font-weight:800;color:var(--red)">−$6,348M</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">MELI origina $4,688M en créditos de Mercado Pago</div>
+    </div>
+    <div class="card" style="border-left:3px solid var(--red)">
+      <div style="font-size:24px;margin-bottom:8px">💳</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px">Financiamiento (Financing)</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Estructura de capital<br>Emisión/pago de deuda, recompra de acciones, dividendos</div>
+      <div style="font-size:28px;font-weight:800;color:var(--red)">−$719M</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">MELI 2024</div>
+    </div>
+  </div>
+  <div class="card" style="background:rgba(255,140,66,.05);border-color:rgba(255,140,66,.2)">
+    <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">MELI 2024 — Resumen de Caja</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;font-size:13px">
+      <span>Caja inicio: <strong style="color:var(--text)">$3,344M</strong></span>
+      <span>+ Operación: <strong style="color:var(--green)">+$7,918M</strong></span>
+      <span>+ Inversión: <strong style="color:var(--red)">−$6,348M</strong></span>
+      <span>+ Financiamiento: <strong style="color:var(--red)">−$719M</strong></span>
+      <span style="font-size:15px;font-weight:700;color:var(--orange)">= Caja cierre: $4,195M (+$851M neto)</span>
+    </div>
+  </div>
+  <div class="discussion">
+    <div class="disc-label">💬 Para discutir</div>
+    <p>MELI genera $7.9B de caja operativa pero invierte $4.7B en créditos de Mercado Pago. ¿Eso es bueno o malo? Depende de si los créditos se cobran...</p>
+  </div>
+</div>
+
+<!-- 13: EVOLUCIÓN PN -->
+<div class="slide" data-section="Evolución del PN">
+  <div class="badge">Evolución del PN</div>
+  <div class="slide-title">¿Cómo <span class="acc">creció</span> el patrimonio?</div>
+  <div class="formula">PN cierre = PN inicio + Resultado Neto − Dividendos + Emisión de acciones</div>
+  <div class="two-col">
+    <div>
+      <table>
+        <thead><tr><th></th><th>2022</th><th>2023</th><th>2024</th></tr></thead>
+        <tbody>
+          <tr><td>PN inicio</td><td>$1,345M</td><td>$1,827M</td><td>$3,071M</td></tr>
+          <tr><td>+ Net Income</td><td class="pos">+$482M</td><td class="pos">+$987M</td><td class="pos">+$1,911M</td></tr>
+          <tr><td>+ Stock-Based Comp</td><td class="pos">+$341M</td><td class="pos">+$368M</td><td class="pos">+$408M</td></tr>
+          <tr><td>− Dividends</td><td style="color:var(--muted)">$0</td><td style="color:var(--muted)">$0</td><td style="color:var(--muted)">$0</td></tr>
+          <tr class="tr-highlight"><td><strong>PN cierre</strong></td><td><strong>$1,827M</strong></td><td><strong>$3,071M</strong></td><td><strong>$4,351M</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card card-green" style="text-align:center">
+          <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Crecimiento PN 2022–2024</div>
+          <div style="font-size:36px;font-weight:800;color:var(--green)">+138%</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">$1.8B → $4.4B en 3 años</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--orange)">
+          <div style="font-size:13px;line-height:1.6;color:var(--muted)">MELI no paga dividendos — reinvierte todo en crecimiento. ¿Es esto bueno para los accionistas? Solo si el <strong style="color:var(--orange)">ROIC &gt; WACC</strong>. <span style="color:var(--muted);font-size:11px">(tema de próximas clases)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 14: LINKAGE -->
+<div class="slide" data-section="Linkage · Los 4 EEFF conectados">
+  <div class="badge">Linkage</div>
+  <div class="slide-title">Los 4 EEFF están <span class="acc">conectados</span></div>
+  <div class="slide-subtitle" style="font-style:italic">"The Balance Sheet is the parent statement" — MIT Sloan</div>
+  <div style="display:flex;gap:24px">
+    <div style="flex:1">
+      <div class="link-grid">
+        <div class="link-box active"><div class="link-box-title">📊 Income Statement</div><div class="link-box-sub">Resultado → Retained Earnings</div></div>
+        <div class="link-box" style="border-color:var(--orange);background:rgba(255,140,66,.08)"><div class="link-box-title" style="color:var(--orange)">📸 Balance Sheet</div><div class="link-box-sub">Estado padre — recibe todo</div></div>
+        <div class="link-box"><div class="link-box-title">💵 Cash Flow</div><div class="link-box-sub">ΔCash → Cash &amp; Equivalents</div></div>
+        <div class="link-box"><div class="link-box-title">📈 Evolución PN</div><div class="link-box-sub">PN cierre = PN en Balance</div></div>
+      </div>
+      <div style="margin-top:16px">
+        <button class="reveal-btn" onclick="revealLink('link1')">🔗 IS → Balance Sheet</button>
+        <div class="link-detail" id="link1">El Net Income de $1,911M fluye a <strong>Retained Earnings</strong> en el PN del Balance Sheet. Así las ganancias se acumulan en el patrimonio de los dueños.</div>
+        <button class="reveal-btn" onclick="revealLink('link2')">🔗 Cash Flow → Balance Sheet</button>
+        <div class="link-detail" id="link2">La variación neta de caja (+$851M) explica el cambio en <strong>Cash &amp; Equivalents</strong> del Balance. De $3,344M a $4,195M.</div>
+        <button class="reveal-btn" onclick="revealLink('link3')">🔗 Evolución PN → Balance Sheet</button>
+        <div class="link-detail" id="link3">El PN final del estado de evolución ($4,351M) es el mismo PN que aparece en el Balance Sheet. No puede ser diferente — es la misma cifra.</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:160px">
+      <div style="font-size:22px;color:var(--orange)">↗ IS</div>
+      <div class="link-arrow">↓</div>
+      <div style="background:rgba(255,140,66,.1);border:2px solid var(--orange);border-radius:10px;padding:16px 24px;text-align:center">
+        <div style="font-size:12px;color:var(--orange);font-weight:700">BALANCE<br>SHEET</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Estado padre</div>
+      </div>
+      <div class="link-arrow">↑</div>
+      <div style="font-size:22px;color:var(--orange)">CF ↗ &nbsp; EPN ↗</div>
+    </div>
+  </div>
+</div>
+
+<!-- 15: NOTAS -->
+<div class="slide" data-section="Notas a los EEFF">
+  <div class="badge">Notas</div>
+  <div class="slide-title">Las Notas: el <span class="acc">contexto</span> que importa</div>
+  <div class="card" style="border-left:3px solid var(--orange);margin-bottom:18px;padding:18px 22px">
+    <div style="font-size:15px;line-height:1.7;font-style:italic;color:var(--text)">"Cada compañía es un mundo distinto. Por eso es <strong style="color:var(--orange)">SUPER IMPORTANTE</strong> revisar las Notas a los EEFF para entender qué compone cada rubro."</div>
+  </div>
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card card-accent">
+      <div style="font-size:20px;margin-bottom:8px">📋</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">Políticas contables</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">¿Qué método de depreciación usa? ¿FIFO o Avg Cost para inventarios? ¿Cómo reconoce revenue?</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:20px;margin-bottom:8px">🔍</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">Detalle de rubros</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">¿Qué hay dentro de 'Other Current Assets'? ¿Cuánto de la deuda vence en 2025?</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:20px;margin-bottom:8px">⚠️</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">Contingencias</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">Litigios pendientes, garantías, obligaciones fuera de balance</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:20px;margin-bottom:8px">🌎</div>
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px">Segmentos</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">Desglose por geografía (Brasil/México/Argentina) y por negocio (Commerce/Fintech)</div>
+    </div>
+  </div>
+  <div class="card" style="background:rgba(255,140,66,.05);border-color:rgba(255,140,66,.2)">
+    <div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:6px">EJEMPLO MELI</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.5">En las notas de MELI encontramos que 'Loans Receivable' de $7.7B corresponde a créditos de Mercado Pago — <strong style="color:var(--text)">crucial para entender el riesgo real del negocio.</strong></div>
+  </div>
+</div>
+
+<!-- 16: DONDE ENCONTRAR EEFF -->
+<div class="slide" data-section="¿Dónde descargo los EEFF?">
+  <div class="badge">Recursos</div>
+  <div class="slide-title">¿Dónde <span class="acc">descargo</span> los EEFF?</div>
+  <div class="two-col">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Fuentes oficiales</div>
+      <div class="source-card">
+        <div class="source-icon">🏛</div>
+        <div>
+          <div class="source-name">SEC (EDGAR)</div>
+          <div class="source-desc">Para empresas que cotizan en EE.UU. — MELI reporta aquí. Buscá el 10-K (anual) y 10-Q (trimestral).</div>
+        </div>
+        <span class="tag tag-g">GRATUITO</span>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">📊</div>
+        <div>
+          <div class="source-name">Investor Relations</div>
+          <div class="source-desc">El sitio oficial de cada empresa tiene sus propios EEFF, presentaciones y earnings calls.</div>
+        </div>
+        <span class="tag tag-g">GRATUITO</span>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">📈</div>
+        <div>
+          <div class="source-name">Yahoo Finance</div>
+          <div class="source-desc">Datos financieros básicos para comparación rápida.</div>
+        </div>
+        <span class="tag tag-g">GRATUITO</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Fuentes profesionales</div>
+      <div class="source-card">
+        <div class="source-icon">🔬</div>
+        <div>
+          <div class="source-name">Capital IQ (S&amp;P)</div>
+          <div class="source-desc">Base de datos institucional con EEFF normalizados, modelos y datos históricos. Disponible en biblioteca UdeSA.</div>
+        </div>
+        <span class="tag tag-b">UdeSA</span>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">📉</div>
+        <div>
+          <div class="source-name">Bloomberg</div>
+          <div class="source-desc">Terminal profesional para datos en tiempo real.</div>
+        </div>
+        <span class="tag tag-b">UdeSA</span>
+      </div>
+      <div class="source-card">
+        <div class="source-icon">🔍</div>
+        <div>
+          <div class="source-name">Seeking Alpha</div>
+          <div class="source-desc">Análisis de inversión y opiniones del mercado.</div>
+        </div>
+        <span class="tag tag-g">GRATUITO</span>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px;border-left:3px solid var(--orange)">
+    <div style="font-size:13px;color:var(--muted);line-height:1.5">📌 <strong style="color:var(--text)">Importante:</strong> siempre ir a la fuente primaria (SEC, Investor Relations) antes que fuentes secundarias. Los números originales son más confiables.</div>
+  </div>
+</div>
+
+<!-- 17: MELI TODO JUNTO -->
+<div class="slide" data-section="Caso MELI · Todo junto">
+  <div class="badge">Caso MELI</div>
+  <div class="slide-title">MELI 2024: <span class="acc">todo junto</span></div>
+  <div class="slide-subtitle">Usando los 4 EEFF para entender el negocio</div>
+  <div class="g4" style="margin-bottom:16px">
+    <div class="card card-accent">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:8px">📸 Balance Sheet</div>
+      <div style="font-size:13px;margin-bottom:6px">Activo: <strong style="color:var(--orange)">$25.2B</strong></div>
+      <div style="font-size:13px;margin-bottom:6px">Pasivo: <strong style="color:var(--red)">$20.8B</strong></div>
+      <div style="font-size:13px;margin-bottom:10px">PN: <strong style="color:var(--green)">$4.4B</strong></div>
+      <div style="font-size:11px;color:var(--muted)">Muy apalancada (82% deuda) — típico fintech</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:8px">📊 Income Statement</div>
+      <div style="font-size:13px;margin-bottom:6px">Revenue: <strong style="color:var(--orange)">$20.8B</strong></div>
+      <div style="font-size:13px;margin-bottom:6px">Gross Profit: <strong style="color:var(--green)">52.7%</strong></div>
+      <div style="font-size:13px;margin-bottom:10px">Net Income: <strong style="color:var(--green)">$1.9B</strong></div>
+      <div style="font-size:11px;color:var(--muted)">De pérdida a $1.9B en 3 años</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:8px">💵 Cash Flow</div>
+      <div style="font-size:13px;margin-bottom:6px">CFO: <strong style="color:var(--green)">+$7.9B</strong></div>
+      <div style="font-size:13px;margin-bottom:6px">FCF: <strong style="color:var(--green)">+$7.1B</strong></div>
+      <div style="font-size:13px;margin-bottom:10px">ΔCash: <strong style="color:var(--green)">+$851M</strong></div>
+      <div style="font-size:11px;color:var(--muted)">Generadora de caja masiva</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:8px">📈 Evolución PN</div>
+      <div style="font-size:13px;margin-bottom:6px">PN 2022: <strong>$1.8B</strong></div>
+      <div style="font-size:13px;margin-bottom:6px">↓</div>
+      <div style="font-size:13px;margin-bottom:10px">PN 2024: <strong style="color:var(--green)">$4.4B</strong></div>
+      <div style="font-size:11px;color:var(--muted)">Sin dividendos: reinvierte todo</div>
+    </div>
+  </div>
+  <div class="discussion">
+    <div class="disc-label">💬 Para discutir</div>
+    <p>¿Qué conclusión sacás de estos 4 números? ¿Es MELI una empresa financieramente sana? ¿Qué pregunta te queda sin responder?</p>
+  </div>
+  <div class="card" style="margin-top:10px;border-left:3px solid var(--orange)">
+    <div style="font-size:13px;color:var(--muted);line-height:1.5">En las próximas clases vamos a analizar cada uno de estos estados en profundidad, reclasificarlos y calcular los indicadores clave de performance.</div>
+  </div>
+</div>
+
+<!-- 18: RECAP -->
+<div class="slide" data-section="Recap · Conceptos clave">
+  <div class="badge">Recap</div>
+  <div class="slide-title">Lo que <span class="acc">aprendimos</span> hoy</div>
+  <div class="recap-item"><span class="recap-check">✓</span><span class="recap-text"><strong>La Ecuación Patrimonial: A = P + PN</strong> — la base de toda la contabilidad</span></div>
+  <div class="recap-item"><span class="recap-check">✓</span><span class="recap-text"><strong>Devengado ≠ Percibido:</strong> ganancia ≠ caja</span></div>
+  <div class="recap-item"><span class="recap-check">✓</span><span class="recap-text"><strong>Los 4 EEFF:</strong> IS (película), BS (foto), CF (película), PN (película)</span></div>
+  <div class="recap-item"><span class="recap-check">✓</span><span class="recap-text"><strong>Activos clasificados por liquidez:</strong> Corriente vs. No Corriente</span></div>
+  <div class="recap-item"><span class="recap-check">✓</span><span class="recap-text"><strong>El Balance Sheet es el "estado padre"</strong> — todos los demás fluyen hacia él</span></div>
+  <div class="recap-item" style="border:none"><span class="recap-check">✓</span><span class="recap-text"><strong>Las Notas son críticas</strong> para entender los detalles detrás de los números</span></div>
+  <div class="discussion" style="margin-top:18px">
+    <div class="disc-label">💬 Pregunta de cierre</div>
+    <p>¿Qué diferencia hay entre una empresa que tiene mucho revenue (IS) pero poco cash (CF)? ¿Puede quebrar una empresa rentable? <span style="color:var(--orange)">(Hint: se llama insolvencia técnica)</span></p>
+  </div>
+</div>
+
+<!-- 19: PRÓXIMAS CLASES -->
+<div class="slide" data-section="¿Qué viene?">
+  <div class="badge">¿Qué viene?</div>
+  <div class="slide-title">El camino por <span class="acc">delante</span></div>
+  <div class="g4" style="margin-bottom:20px">
+    <div class="card card-accent">
+      <div style="font-size:10px;color:var(--orange);font-weight:700;text-transform:uppercase;margin-bottom:8px">Clase 2</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">Análisis Vertical y Horizontal</div>
+      <div style="font-size:12px;color:var(--muted)">Comparar MELI con sí misma en el tiempo</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:10px;color:var(--orange);font-weight:700;text-transform:uppercase;margin-bottom:8px">Clase 3</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">Reclasificación del Balance</div>
+      <div style="font-size:12px;color:var(--muted)">Visión financiera vs. contable. Las 'cajitas'.</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:10px;color:var(--orange);font-weight:700;text-transform:uppercase;margin-bottom:8px">Clase 4</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">ROIC, NOPAT y FCF</div>
+      <div style="font-size:12px;color:var(--muted)">¿Crea valor MELI?</div>
+    </div>
+    <div class="card card-accent">
+      <div style="font-size:10px;color:var(--orange);font-weight:700;text-transform:uppercase;margin-bottom:8px">Clase 5</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:6px">Valuación por DCF</div>
+      <div style="font-size:12px;color:var(--muted)">¿Cuánto vale MELI?</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:0;justify-content:center;flex-wrap:wrap;margin-top:8px">
+    <div style="background:rgba(255,140,66,.1);border:2px solid var(--orange);border-radius:10px;padding:14px 20px;text-align:center;min-width:120px">
+      <div style="font-size:12px;font-weight:700;color:var(--orange)">EEFF</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">Clase 1</div>
+    </div>
+    <div style="font-size:24px;color:var(--muted);padding:0 8px">→</div>
+    <div style="background:var(--card2);border:2px solid var(--border);border-radius:10px;padding:14px 20px;text-align:center;min-width:120px">
+      <div style="font-size:12px;font-weight:700">Reclasificación</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">Clases 2–3</div>
+    </div>
+    <div style="font-size:24px;color:var(--muted);padding:0 8px">→</div>
+    <div style="background:var(--card2);border:2px solid var(--border);border-radius:10px;padding:14px 20px;text-align:center;min-width:120px">
+      <div style="font-size:12px;font-weight:700">Performance</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">Clase 4</div>
+    </div>
+    <div style="font-size:24px;color:var(--muted);padding:0 8px">→</div>
+    <div style="background:var(--card2);border:2px solid var(--border);border-radius:10px;padding:14px 20px;text-align:center;min-width:120px">
+      <div style="font-size:12px;font-weight:700">Valuación</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">Clase 5</div>
+    </div>
+  </div>
+</div>
+
+<!-- 20: CIERRE -->
+<div class="slide cover" data-section="Cierre">
+  <div class="cover-logo">M</div>
+  <div class="slide-title">FINANZAS<br><span style="color:var(--orange)">CORPORATIVAS</span></div>
+  <div style="max-width:460px;margin:24px auto 0">
+    <div class="recap-item" style="justify-content:center;border-bottom:1px solid rgba(255,255,255,.06)"><span class="recap-check">✓</span><span class="recap-text">Entendemos el lenguaje de los negocios</span></div>
+    <div class="recap-item" style="justify-content:center;border-bottom:1px solid rgba(255,255,255,.06)"><span class="recap-check">✓</span><span class="recap-text">Leemos los 4 Estados Financieros</span></div>
+    <div class="recap-item" style="justify-content:center;border-bottom:1px solid rgba(255,255,255,.06)"><span class="recap-check">✓</span><span class="recap-text">Distinguimos devengado de percibido</span></div>
+    <div class="recap-item" style="justify-content:center;border-bottom:1px solid rgba(255,255,255,.06)"><span class="recap-check">✓</span><span class="recap-text">Clasificamos activos, pasivos y PN</span></div>
+    <div class="recap-item" style="justify-content:center;border:none"><span class="recap-check">✓</span><span class="recap-text">Aplicamos todo a MELI 2024</span></div>
+  </div>
+  <div class="cover-chips" style="margin-top:28px">
+    <div class="cover-chip">¡Muchas gracias!</div>
+    <div class="cover-chip">❓ Preguntas</div>
+    <div class="cover-chip">📚 Material en campus virtual</div>
+  </div>
+  <div style="margin-top:20px;font-size:13px;color:var(--muted)">Próxima clase: Análisis Vertical y Horizontal</div>
+</div>
+
+</div><!-- end slides -->
+
+<!-- CONTROLS -->
+<div id="controls">
+  <button class="btn-nav" id="btn-prev" onclick="prevSlide()" disabled>← Anterior</button>
+  <div id="slide-dots"></div>
+  <button class="btn-nav" id="btn-next" onclick="nextSlide()">Siguiente →</button>
+</div>
+
+<script>
+// ===== SLIDE NAVIGATION =====
+const SLIDES = document.querySelectorAll('.slide');
+const TOTAL = SLIDES.length;
+let current = 0;
+
+function buildDots(){
+  const d=document.getElementById('slide-dots');
+  d.innerHTML='';
+  SLIDES.forEach((_,i)=>{
+    const dot=document.createElement('span');
+    dot.className='dot'+(i===0?' active':'');
+    dot.onclick=()=>goTo(i);
+    d.appendChild(dot);
+  });
+}
+buildDots();
+
+function goTo(n){
+  if(n<0||n>=TOTAL)return;
+  SLIDES[current].classList.remove('active');
+  SLIDES[current].classList.add('exit');
+  setTimeout(()=>SLIDES[current].classList.remove('exit'),400);
+  current=n;
+  SLIDES[current].classList.add('active');
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+  document.getElementById('btn-prev').disabled=current===0;
+  document.getElementById('btn-next').disabled=current===TOTAL-1;
+  document.getElementById('nav-counter').textContent=`${current+1} / ${TOTAL}`;
+  document.getElementById('nav-section').textContent=SLIDES[current].dataset.section||'';
+  document.getElementById('progress').style.width=`${(current/(TOTAL-1))*100}%`;
+}
+function nextSlide(){goTo(current+1)}
+function prevSlide(){goTo(current-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')nextSlide();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prevSlide();
+});
+
+// ===== TIMER =====
+let timerInterval=null, timerSeconds=0, timerRunning=false;
+function toggleTimer(){
+  if(timerRunning){clearInterval(timerInterval);timerRunning=false;}
+  else{timerInterval=setInterval(()=>{timerSeconds++;document.getElementById('timer-display').textContent='⏱ '+fmtTime(timerSeconds);},1000);timerRunning=true;}
+}
+function fmtTime(s){return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`}
+
+// ===== CLASIFICAR EJERCICIO (A/P/PN y Balance) =====
+function classify(itemId, answer, selected, btnEl) {
+  const item = document.getElementById(itemId);
+  const btns = item.querySelectorAll('.clf-btn');
+  btns.forEach(b => b.classList.remove('sel'));
+  btnEl.classList.add('sel');
+  item.dataset.selected = selected;
+}
+
+function checkClassify(exerciseId, correctMap) {
+  Object.entries(correctMap).forEach(([id, correct]) => {
+    const item = document.getElementById(id);
+    if (!item) return;
+    const selected = item.dataset.selected;
+    const btns = item.querySelectorAll('.clf-btn');
+    btns.forEach(b => {
+      b.classList.remove('sel', 'ok', 'bad');
+      if (b.dataset.val === correct) b.classList.add('ok');
+      else if (b.dataset.val === selected && selected !== correct) b.classList.add('bad');
+    });
+  });
+}
+
+function revealClassify(correctMap) {
+  Object.entries(correctMap).forEach(([id, correct]) => {
+    const item = document.getElementById(id);
+    if (!item) return;
+    const btns = item.querySelectorAll('.clf-btn');
+    btns.forEach(b => {
+      b.classList.remove('sel', 'ok', 'bad');
+      if (b.dataset.val === correct) b.classList.add('ok');
+    });
+  });
+}
+
+const ex1Answers = {
+  'clf1':'A','clf2':'A','clf3':'P','clf4':'PN','clf5':'A',
+  'clf6':'P','clf7':'A','clf8':'PN','clf9':'P','clf10':'A'
+};
+const ex3Answers = {
+  'bsclf1':'AC','bsclf2':'AC','bsclf3':'ANC','bsclf4':'ANC','bsclf5':'PC',
+  'bsclf6':'PC','bsclf7':'PNC','bsclf8':'PNC','bsclf9':'PN','bsclf10':'PN'
+};
+
+// ===== DEVENGADO EXERCISE =====
+function selectDev(itemId, type, btnEl) {
+  const item = document.getElementById(itemId);
+  const btns = item.querySelectorAll('.dev-btn');
+  btns.forEach(b => b.classList.remove('sel-dev','sel-per'));
+  btnEl.classList.add(type === 'dev' ? 'sel-dev' : 'sel-per');
+}
+
+function revealAllDev() {
+  document.querySelectorAll('.dev-explain').forEach(el => el.classList.add('show'));
+}
+
+// ===== EEFF CARD CLICK =====
+function toggleEEFF(id) {
+  document.querySelectorAll('.eeff-card').forEach(c => c.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== LINKAGE REVEAL =====
+function revealLink(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+
+goTo(0);
+</script>
+</body>
+</html>

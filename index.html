@@ -8,7 +8,7 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --bg:#0D1117;--card:#161B27;--card2:#1C2333;
-  --yellow:#FFE600;--green:#21D07A;--blue:#58A6FF;--purple:#BC8CFF;
+  --yellow:#FFE600;--green:#21D07A;--blue:#58A6FF;--purple:#BC8CFF;--orange:#FF8C42;
   --text:#E6EDF3;--muted:#8B949E;--border:#30363D;
 }
 body{
@@ -79,6 +79,10 @@ body{
 .card-5:hover{border-color:rgba(188,140,255,0.4);box-shadow:0 20px 60px rgba(188,140,255,0.1);}
 .card-5 .card-num{color:var(--purple);}
 .card-5 .card-btn{background:var(--purple);color:#000;}
+.card-1::before{background:var(--orange);}
+.card-1:hover{border-color:rgba(255,140,66,0.4);box-shadow:0 20px 60px rgba(255,140,66,0.1);}
+.card-1 .card-num{color:var(--orange);}
+.card-1 .card-btn{background:var(--orange);color:#000;}
 .footer{margin-top:52px;text-align:center;font-size:12px;color:var(--muted);}
 .footer span{color:var(--yellow);}
 </style>
@@ -92,6 +96,23 @@ body{
 </div>
 
 <div class="cards">
+
+  <a class="class-card card-1" href="c1.html">
+    <div class="card-icon">📚</div>
+    <div class="card-num">Tutorial 1</div>
+    <div class="card-title">Introducción a los EEFF</div>
+    <div class="card-desc">Ecuación Patrimonial, Devengado vs. Percibido y los 4 Estados Financieros. Aplicado al Balance, IS y Cash Flow de MELI 2024.</div>
+    <div class="card-tags">
+      <span class="tag" style="background:rgba(255,140,66,.15);color:var(--orange)">Ecuación Patrimonial</span>
+      <span class="tag" style="background:rgba(255,140,66,.15);color:var(--orange)">4 EEFF</span>
+      <span class="tag" style="background:rgba(255,140,66,.15);color:var(--orange)">Devengado</span>
+      <span class="tag" style="background:rgba(255,140,66,.15);color:var(--orange)">Linkage</span>
+    </div>
+    <div class="card-meta">
+      <span class="card-time">⏱ 90 min · 21 slides</span>
+      <span class="card-btn">Abrir →</span>
+    </div>
+  </a>
 
   <a class="class-card card-2" href="c2.html">
     <div class="card-icon">📊</div>
