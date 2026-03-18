@@ -126,6 +126,51 @@ tbody tr:hover{background:rgba(255,255,255,0.02);}
 .nof-val{font-size:12px;font-variant-numeric:tabular-nums;font-weight:700;}
 .nof-plus{color:var(--green);}
 .nof-minus{color:var(--red);}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  html,body{overflow:hidden}
+  #navbar{padding:0 12px;height:46px}
+  #nav-section{display:none}
+  #timer-display{font-size:11px;padding:3px 7px}
+  #nav-counter{font-size:11px}
+  #progress{top:46px}
+  #slides{top:49px;bottom:58px}
+  .slide{padding:14px 14px 10px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #controls{height:58px;gap:8px;padding:0 8px}
+  .btn-nav{padding:8px 14px;font-size:13px}
+  #slide-dots{display:none}
+  .slide-title{font-size:20px;margin-bottom:4px}
+  .slide-subtitle{font-size:12px;margin-bottom:14px}
+  .badge,.badge-blue,.badge-green,.badge-purple{font-size:9px;margin-bottom:8px}
+  .cover .slide-title{font-size:24px}
+  .cover-logo{width:50px;height:50px;font-size:24px;margin-bottom:14px}
+  .cover-chips{gap:6px;margin-top:16px}
+  .cover-chip{font-size:10px;padding:5px 10px}
+  .g2{grid-template-columns:1fr;gap:10px}
+  .g3{grid-template-columns:1fr;gap:10px}
+  .g4{grid-template-columns:1fr 1fr;gap:8px}
+  .two-col{grid-template-columns:1fr;gap:10px}
+  .three-col{grid-template-columns:1fr;gap:10px}
+  .card{padding:12px}
+  .formula{font-size:12px;padding:10px 12px}
+  .kpi-val{font-size:24px}
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:11px}
+  thead th{padding:6px 7px}
+  tbody td{padding:6px 7px}
+  .tl{flex-direction:column}
+  .tl-item{border-top:none;border-left:3px solid var(--border);padding:6px 10px;text-align:left}
+  .tl-item.done{border-left-color:var(--green)}
+  .tl-item.current{border-left-color:var(--yellow)}
+  .step-title{font-size:13px}
+  .step-desc{font-size:11px}
+  .recap-text{font-size:12px}
+  .discussion p{font-size:12px}
+  .chart-wrap canvas{max-height:180px}
+  .btn-row{gap:6px}
+  .reveal-btn{font-size:11px;padding:7px 12px}
+  .nof-row{flex-wrap:wrap}
+}
 </style>
 </head>
 <body>
@@ -953,6 +998,9 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight'||e.key==='ArrowDown')nextSlide();
   if(e.key==='ArrowLeft'||e.key==='ArrowUp')prevSlide();
 });
+let _tx=0,_ty=0;
+document.addEventListener('touchstart',e=>{_tx=e.touches[0].clientX;_ty=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty;if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40){dx<0?nextSlide():prevSlide();}},{passive:true});
 
 // ===== TIMER =====
 function toggleTimer(){
